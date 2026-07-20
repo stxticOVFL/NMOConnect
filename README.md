@@ -1,37 +1,22 @@
-# NWCommon
+# NMOConnect
 
-A cross-platform .NET setup for creating mods for Neon White.
+A quick mod for Neon Monthly Open to pass duel information onto a server and autocreate duel reports.
 
-## Dependencies
+## Features
+- Type in credentials and one-click enable and you're ready to go for NMO
+- Tracks duels for tourney participants or for yourself with the tournament-less tracking setting!
+- Seriously there's not much else to this
+- ....yet/in its current form :3
 
-This project supports at least .NET 8.0 out of the box, and utilizes its SDK. Some projects may require higher .NET versions.
+## Installation
+1. Download [MelonLoader](https://github.com/LavaGang/MelonLoader/releases/latest) and install v0.6.1 onto your `Neon White.exe`.
+2. Run the game once. This will create required folders.
+3. Download and follow the installation instructions for [NeonLite](https://github.com/Faustas156/NeonLite).
+    - NeonLite is **required** for this mod.
+4. Download `NMOConnect.dll` from the [Releases page](https://github.com/stxticOVFL/NMOConnect/releases/latest) and drop it in the `Mods` folder.
 
-- Windows: [Download the SDK manually](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) or use the [Visual Studio Installer.](https://visualstudio.microsoft.com/downloads/)
-- macOS: [Download the SDK.](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) 
-- Linux: Follow the instructions on [how to get the .NET SDK](https://learn.microsoft.com/en-us/dotnet/core/install/linux) for your distro.
+## Building & Contributing
+This project is based on [**NWCommon.**](https://github.com/stxticOVFL/NWCommon/tree/master?tab=readme-ov-file) 
+Follow the build instructions on the repository.
 
-Neon White must be setup with [MelonLoader 0.6.1.](https://melonwiki.xyz/#/)
-**Additionally,** some projects may need either [**NeonLite**](https://github.com/Faustas156/NeonLite) or [**UniverseLib Mono.**](https://github.com/sinai-dev/UniverseLib/releases/tag/1.5.1) Install those into your Neon White as normal.
-## Building
-
-To build a NWCommon project:
-1. Make sure you have [**setup the dependencies.**](#dependencies)
-2. Copy `NWConfig.props.base` to a new file `NWConfig.props` and configure it to match your setup.
-3. Run `dotnet build -v d`, which will build the project and copy it directly to your Neon White directory as configured in `NWConfig.props`.
-    - You can also open the project in Visual Studio on Windows and build from there. 
-    - To build a release build, run `dotnet build -c Release -v d`.
-
-## Development
-
-To setup a new NWCommon project:
-1. Make sure you have [**setup the dependencies.**](#dependencies)
-2. **Download** this repository and setup git inside of it by using `git init`.
-    - It is **not recommended** to clone/fork this repository, as the example project-specific files will conflict.
-3. Open and rename `ExampleMod.csproj` to configure the mod. The project file is where things like the mod name, authors, version, and further configuration goes.
-4. Restructure the source files as you see fit. All `.cs`, `.resx`, etc files will all be picked up and automatically compiled.
-5. Further configuration can be done in the project file just like as you would any other MSBuild project.
-    - This includes adding new references, as commented in the project file.
-    - **Do not use Visual Studio to further configure the project.** This may disrupt the project file and will make it harder for other contributors to use.
-      - If you are using Visual Studio to work on the project and it needs configuring, **unload the project and edit the project file manually.** 
-6. Follow the [building instructions](#building) to build and publish your project.
-    - Make sure to setup a repository (GitHub, GitLab, etc) for easy viewing of source code for speedrun.com verification!
+Make any edits as needed, and make a PR for review. PRs are very appreciated!
