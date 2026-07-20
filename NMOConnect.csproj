@@ -1,0 +1,102 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <!-- The name of the mod -->
+        <NWName>NMOConnect</NWName>
+        <NWAuthor>stxticOVFL</NWAuthor>
+        <NWVersion>1.0.0</NWVersion>
+        <!-- The name of the *DLL* -->
+        <AssemblyName>$(NWName)</AssemblyName>
+
+        <!-- Root namespace of the mod -->
+        <RootNamespace>$(AssemblyName)</RootNamespace>
+
+        <!-- The folder to copy the DLL to, e.g. Mods or Plugins -->
+        <NWOutput Condition="'$(NWOutput)' == ''">
+            Mods
+        </NWOutput>
+        <!-- Whether or not to add NeonLite as a reference. Either true or false. Looks in NWDir/Mods -->
+        <NWNeonLite Condition="'$(NWNeonLite)' == ''">
+            true
+        </NWNeonLite>
+        <!-- Whether or not to add UniverseLib as a reference. Either true or false.
+             Looks in NWDir/Mods and NWDir/UserLibs -->
+        <NWUniLib Condition="'$(NWUniLib)' == ''">
+            false
+        </NWUniLib>
+
+        <!-- Whether or not to fill in the assembly info for you. This should usually be true.
+             This also controls GenerateAssemblyInfo -->
+        <NWAssembly Condition="'$(NWAssembly)' == ''">
+            true
+        </NWAssembly>
+        <!-- The name of the class that inherits the relevant Melon class, relative to the root namespace.
+             Usually this matches the name of the root namespace.
+             Only used if NWAssembly is on -->
+        <NWMelonClass>$(RootNamespace)</NWMelonClass>
+        <!-- The color to show in the log for the project. #RRGGBB.
+             Only used if NWAssembly is on -->
+        <NWColor>#FFFFFF</NWColor>
+        <!-- The author color to show in the log. #RRGGBB.
+             Only used if NWAssembly is on -->
+        <NWAuthorColor>#FFFFFF</NWAuthorColor>
+
+        <!-- A path to Unity scripts to additionally compile. Useful for mods with independent UIs.
+             Editor scripts are skipped.
+             Leave empty if no Unity scripts. Advanced users only! -->
+        <NWUnityScripts>
+
+        </NWUnityScripts>
+    </PropertyGroup>
+
+    <Import Project="-NWCommon/NWCommon.targets" />
+
+    <!-- Non-NWCommon properties, items, etc go here -->
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>12.0</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Add further references by using $(NWManaged) and $(NWDirectory): -->
+        <Reference Include="$(NWDirectory)/Mods/NeonNetwork.dll" Private="false" />
+        <Reference Include="$(NWManaged)/UnityEngine.UnityWebRequestModule.dll" Private="false" />
+        <Reference Include="$(NWManaged)/Unity.TextMeshPro.dll" Private="false" />
+        <Reference Include="$(NWManaged)/UnityEngine.UI.dll" Private="false" />
+        <Reference Include="$(NWManaged)/UnityEngine.UIModule.dll" Private="false" />
+
+        <!-- <PackageReference Include="FFMpegCore" Version="*" GeneratePathProperty="true">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="*" GeneratePathProperty="true">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>none</IncludeAssets>
+        </PackageReference>
+
+        <Reference Remove="$(NWManaged)/System.dll" Private="false" /> -->
+    </ItemGroup>
+
+    <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+
+    <!-- <UsingTask AssemblyFile="$(PkgILRepack_Lib_MSBuild_Task)/build/ILRepack.Lib.MSBuild.Task.dll" TaskName="ILRepack"/>
+
+    <Target Name="ILRepack" BeforeTargets="MoveDLL">
+        <Message Text="Combining DLLs..." Importance="high" />
+
+        <Delete Condition="Exists('$(TargetDir)$(TargetName).dll.pre')" Files="$(TargetDir)$(TargetName).dll.pre" />
+        <Move SourceFiles="$(TargetDir)$(TargetName).dll" DestinationFiles="$(TargetDir)$(TargetName).dll.pre" />
+
+        <ItemGroup>
+            <ComboDLLs Include="$(TargetDir)$(TargetName).dll.pre" />
+            <ComboDLLs Include="$(PkgFFMpegCore)/lib/netstandard2.0/*.dll" />
+        </ItemGroup>
+
+        <ILRepack
+            Parallel="true"
+            Internalize="true"
+            InputAssemblies="@(ComboDLLs)"
+            LibraryPath="$(OutputPath);@(ReferencePathWithRefAssemblies->'%(RootDir)%(Directory)')"
+            TargetKind="Dll"
+            OutputFile="$(TargetDir)$(TargetName).dll"
+        />
+    </Target> -->
+</Project>
