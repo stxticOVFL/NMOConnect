@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 using MelonLoader.TinyJSON;
 using NMOConnect.Modules;
@@ -123,6 +124,10 @@ namespace NMOConnect
         static void MakeRequest(string method, string route, Requests.BaseRequest data, Action<UnityWebRequest> callback, bool auth = true, bool _tried = false)
         {
             NMOConnect.Log.DebugMsg($"{method} {route} AUTH {auth}");
+#if DEBUG
+            var stacktrace = new StackTrace();
+            NMOConnect.Log.DebugMsg($"{stacktrace}");
+#endif
 
             if (auth && currentToken == null)
             {
@@ -130,7 +135,7 @@ namespace NMOConnect
                 Login(req =>
                 {
                     if (req.result == UnityWebRequest.Result.Success)
-                        Post(route, data, callback, true);
+                        MakeRequest(method, route, data, callback, true, true);
                     else
                         callback?.Invoke(req);
                 });
@@ -151,7 +156,10 @@ namespace NMOConnect
             var res = req.SendWebRequest();
             res.completed += _ =>
             {
-                if (req.result == UnityWebRequest.Result.ProtocolError && req.responseCode == 401 && !_tried)
+                NMOConnect.Log.DebugMsg($"{method} {route} RESULT {req.responseCode}");
+                NMOConnect.Log.DebugMsg(req.downloadHandler.text);
+
+                if (req.result == UnityWebRequest.Result.ProtocolError && req.responseCode == 401 && auth && !_tried)
                 {
                     // our token expired or smth, try again
                     Login(req =>
@@ -163,9 +171,6 @@ namespace NMOConnect
                     });
                     return;
                 }
-
-                NMOConnect.Log.DebugMsg($"{method} {route} RESULT {req.responseCode}");
-                NMOConnect.Log.DebugMsg(req.downloadHandler.text);
 
                 callback?.Invoke(req);
             };
