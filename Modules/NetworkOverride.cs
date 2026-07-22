@@ -266,8 +266,10 @@ namespace NMOConnect.Modules
         static void SetBuildT(MonoBehaviour __instance)
         {
             buildText = __instance.transform.Find("Build").GetComponent<TextMeshProUGUI>();
-            if (Online.Connected && !buildText.text.Contains("|"))
-                buildText.text = "Connected to NMO | " + buildText.text;
+            buildText.overflowMode = TextOverflowModes.Overflow;
+            buildText.enableWordWrapping = false;
+            if (Online.userID != null && !buildText.text.Contains("|"))
+                buildText.text = $"NMO User ID: {Online.userID} | " + buildText.text;
         }
     }
 }

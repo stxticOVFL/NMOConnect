@@ -12,9 +12,9 @@ namespace NMOConnect
     {
         const string URL = "https://nw.darksoilt.com/api/v1";
 
-        internal static bool Connected => currentToken != null;
-
         static string currentToken = null;
+        internal static string userID = null;
+
         internal static CSteamID steamID;
 
         internal static class Requests
@@ -103,12 +103,14 @@ namespace NMOConnect
                 {
                     var variant = JSON.Load(req.downloadHandler.text);
                     currentToken = variant["token"];
+                    userID = variant["user_id"];
                     if (buildText && !buildText.text.Contains("|"))
-                        buildText.text = "Connected to NMO | " + buildText.text;
+                        buildText.text = $"NMO User ID: {userID} | " + buildText.text;
                 }
                 else
                 {
                     currentToken = null;
+                    userID = null;
                     if (buildText && buildText.text.Contains("|"))
                         buildText.text = buildText.text
                         .Split([" | "], StringSplitOptions.None)[1];
