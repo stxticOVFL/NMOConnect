@@ -22,14 +22,15 @@ namespace NMOConnect.Modules
         static void Activate(bool _)
         {
             Rooms.RegisterCustomHandler(HID, ChatMsgHandler);
-            Rooms.RegisterPostHandler(Rooms.LobbyChatOp.RaceCall, OnRaceCall);
+            // Rooms.RegisterPostHandler(Rooms.LobbyChatOp.RaceCall, OnRaceCall);
             Rooms.RegisterPostHandler(Rooms.LobbyChatOp.RacePB, OnRacePB);
             Rooms.RegisterPostHandler(Rooms.LobbyChatOp.RaceLastRun, OnRacePB);
 
             Rooms.RegisterPostHandler(Rooms.LobbyChatOp.Leave, OnPlayerExit);
             Rooms.RegisterPostHandler(Rooms.LobbyChatOp.Kick, OnPlayerExit);
 
-            Patching.AddPatch(typeof(Rooms), "StartRace", OnRaceStart, Patching.PatchTarget.Prefix);
+            Patching.AddPatch(typeof(Rooms), "CallRace", OnRaceCall, Patching.PatchTarget.Postfix);
+            Patching.AddPatch(typeof(Rooms), "StartRace", OnRaceStart, Patching.PatchTarget.Postfix);
             Patching.AddPatch(typeof(Rooms), "StopRace", OnRaceCancel, Patching.PatchTarget.Prefix);
 
             Patching.AddPatch(typeof(Rooms), "LeaveRoom", Reset, Patching.PatchTarget.Prefix);
@@ -147,12 +148,18 @@ namespace NMOConnect.Modules
 
             if (Rooms.owner != Online.steamID)
                 return;
-            // if (Rooms.inRoom.Count == 0)
-            //     return; // don't do this for empty rooms bro
+#if !DEBUG
+            if (Rooms.inRoom.Count == 0)
+                return; // don't do this for empty rooms bro
+#endif
+
             if (tourneyID == null)
             {
                 if (tidOutgoing)
+                {
                     didBuffer = true;
+                    return;
+                }
                 if (!NMOConnect.Settings.always.Value)
                     return;
             }
@@ -167,15 +174,18 @@ namespace NMOConnect.Modules
             Rooms.SendLobbyMsg();
         }
 
-        static void OnRaceCall(BinaryReader _, BinaryWriter _2, ulong id)
+        static void OnRaceCall()
         {
             NMOConnect.Log.DebugMsg("OnRaceCall");
 
-            if (id != Rooms.owner.m_SteamID)
-                return;
-            Reset();
             if (Rooms.owner != Online.steamID)
                 return;
+#if !DEBUG
+            if (Rooms.inRoom.Count == 0)
+                return; // don't do this for empty rooms bro
+#endif
+            Reset();
+
 
             tidOutgoing = true;
             Online.Get("/tourney/current", req =>
@@ -252,14 +262,15 @@ namespace NMOConnect.Modules
 
         static void OnRaceCancel()
         {
+            var wasduel = duelID;
             Reset();
 
             if (Rooms.owner != Online.steamID)
                 return;
-            if (duelID == null)
+            if (wasduel == null)
                 return;
 
-            Online.Delete($"/duels/{duelID}", null);
+            Online.Delete($"/duels/{wasduel}", null);
         }
 
         static void SetRoomsC(TextMeshProUGUI ___roomCode) => roomsC = ___roomCode;

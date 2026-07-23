@@ -3,7 +3,7 @@
         <!-- The name of the mod -->
         <NWName>NMOConnect</NWName>
         <NWAuthor>stxticOVFL</NWAuthor>
-        <NWVersion>1.0.1</NWVersion>
+        <NWVersion>1.0.3</NWVersion>
         <!-- The name of the *DLL* -->
         <AssemblyName>$(NWName)</AssemblyName>
 
